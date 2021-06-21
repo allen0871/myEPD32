@@ -236,27 +236,31 @@ int Timer_Process(void)
       Http_Get_Token();
     if ( epd_rtc_data.is_init)
     {
-      Http_Get_RealWeather();
       Http_Get_HotNews();     //每半小时更新实时热点新闻
+      if(nowMinute == 0) {    //每一小时更新一次天气,todo, leave
+        Http_Get_RealWeather();
+        Http_Get_TodoList();
+        Http_Get_LeaveMsg();
+      }
+      WIFI_Disconnect();
     }
   }
   if (nowMinute % 5 == 0) //更新todo    每隔5分钟
   {
     Serial.println("nowMinute%5=0 ");
-                 epd_rtc_data.ScreenSlect++;//每5分钟刷新一下屏幕
-          if (epd_rtc_data.ScreenSlect > 5)
-      epd_rtc_data.ScreenSlect = 1;
-      Serial.printf("ScreenSlect %d\n", epd_rtc_data.ScreenSlect);
-    addap();
+    epd_rtc_data.ScreenSlect++;//每5分钟刷新一下屏幕
+    if (epd_rtc_data.ScreenSlect > 5)
+    epd_rtc_data.ScreenSlect = 1;
+    Serial.printf("ScreenSlect %d\n", epd_rtc_data.ScreenSlect);
     if (!epd_rtc_data.is_init)
+    {
+      addap();
       Http_Get_Token();
+      WIFI_Disconnect();
+    }
     if ( epd_rtc_data.is_init)
     {
-      Http_Get_TodoList();
-      Http_Get_LeaveMsg();
-      WIFI_Disconnect(); 
       epd_user.DrawFullScreen();
-  
     }
   }
   else                  //以上都没有  只刷新时间 局部刷新

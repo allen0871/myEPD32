@@ -320,7 +320,7 @@ void EPD4INC::DrawUTF_lhb(int16_t x, int16_t y, String code, unsigned char isinv
   code.toCharArray(buffer, 512); 
   charcount = UTFtoUNICODE((unsigned char*)buffer);
   line = (charcount/60+1);
-  Serial.printf("\n DrawUTF charcount is%d\n",charcount);   //字符长度
+  //Serial.printf("\n DrawUTF charcount is%d\n",charcount);   //字符长度
   for(i=0;i<line;i++)
   {
     DrawUTF(x, y+(18*i), (unsigned char *)(&buffer[i*30]), isinv);
@@ -336,7 +336,7 @@ int EPD4INC::DrawUTF_hz(int16_t x, int16_t y, String code, unsigned char isinv, 
   code.toCharArray(buffer, 512); 
   charcount = UTFtoUNICODE((unsigned char*)buffer);
 
-  Serial.printf("\n DrawUTF hz charcount is%d\n",charcount);   //字符长度
+  //Serial.printf("\n DrawUTF hz charcount is%d\n",charcount);   //字符长度
   
   while(charcount>0)
   {
@@ -346,7 +346,7 @@ int EPD4INC::DrawUTF_hz(int16_t x, int16_t y, String code, unsigned char isinv, 
       xoffset = x + offset; 
     }
     int locat = DrawUnicodeStr(xoffset, y+(18*line), charcount, (unsigned char *)(UNICODEbuffer+index), isinv, &drawLength);
-    Serial.printf("x=%d loc=%d drawLength=%d\n", x, locat, drawLength);
+    //Serial.printf("x=%d loc=%d drawLength=%d\n", x, locat, drawLength);
     charcount -= drawLength;
     index += drawLength;
     line++;
@@ -354,7 +354,7 @@ int EPD4INC::DrawUTF_hz(int16_t x, int16_t y, String code, unsigned char isinv, 
       break;
     }
   }
-  Serial.println(buffer);
+  //Serial.println(buffer);
   return line;
 }
 
