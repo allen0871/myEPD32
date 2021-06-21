@@ -1,0 +1,7 @@
+{
+    "git.ignoreLimitWarning": true,
+    "search.exclude": {
+        "**/.cpp": true
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
