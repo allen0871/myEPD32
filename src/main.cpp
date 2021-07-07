@@ -165,14 +165,15 @@ int KEY2_Process(void)
   { //短按 处理
     Serial.println("KEY2 UP  ");
     addap();
-     epd_rtc_data.ScreenSlect = 3; //tiger增加
+     epd_rtc_data.ScreenSlect = 5; //日历
     if (!epd_rtc_data.is_init)
       Http_Get_Token();
     if ( epd_rtc_data.is_init)
     {
+      Http_Get_RealWeather();
       Serial.println("Http_Get_HotNews  ");
-      //Http_Get_HotNews();
-      //Http_Get_TodoList();
+      Http_Get_HotNews();
+      Http_Get_TodoList();
       Http_Get_LeaveMsg();
       //刷新屏幕
       epd_user.DrawFullScreen();
@@ -236,11 +237,18 @@ int Timer_Process(void)
       Http_Get_Token();
     if ( epd_rtc_data.is_init)
     {
-      Http_Get_HotNews();     //每半小时更新实时热点新闻
-      if(nowMinute == 0) {    //每一小时更新一次天气,todo, leave
-        Http_Get_RealWeather();
-        Http_Get_TodoList();
-        Http_Get_LeaveMsg();
+      try {
+        Http_Get_HotNews();     //每半小时更新实时热点新闻
+        epd_user.FeedWDT();
+        if(nowMinute == 0) {    //每一小时更新一次天气,todo, leave
+          Http_Get_RealWeather();
+          Http_Get_TodoList();
+          epd_user.FeedWDT();
+          Http_Get_LeaveMsg();
+        }
+      }
+      catch(...) {
+        Serial.println("catch some error........");
       }
       WIFI_Disconnect();
     }
@@ -249,8 +257,12 @@ int Timer_Process(void)
   {
     Serial.println("nowMinute%5=0 ");
     epd_rtc_data.ScreenSlect++;//每5分钟刷新一下屏幕
-    if (epd_rtc_data.ScreenSlect > 5)
-    epd_rtc_data.ScreenSlect = 1;
+    if(epd_rtc_data.ScreenSlect == 2 || epd_rtc_data.ScreenSlect == 3) {
+      epd_rtc_data.ScreenSlect = 4;
+    }
+    if (epd_rtc_data.ScreenSlect > 5) {
+      epd_rtc_data.ScreenSlect = 1;
+    }
     Serial.printf("ScreenSlect %d\n", epd_rtc_data.ScreenSlect);
     if (!epd_rtc_data.is_init)
     {

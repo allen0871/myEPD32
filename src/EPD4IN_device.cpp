@@ -936,7 +936,7 @@ float  EPD4IN_Device::GetBatVol(void)
   analogReadResolution(12);
   pinMode(35, INPUT);
   delay(20);
-  analog_value = analogRead(35) / 560.1;
+  analog_value = analogRead(35) / 586.1;
   Serial.printf("BAT VOL IS%f:\n", analog_value);
   digitalWrite(23, LOW);
   pinMode(23, INPUT); //BAT EN H
